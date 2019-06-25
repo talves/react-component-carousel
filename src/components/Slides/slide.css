@@ -1,0 +1,56 @@
+.component-carousel__slide-wrapper {
+  position: relative;
+}
+
+.component-carousel__slide-wrapper.left,
+.component-carousel__slide-wrapper.right {
+  display: inline-block;
+  width: calc(100% - 113px);
+}
+
+@media (max-width: 768px) {
+
+  .component-carousel__slide-wrapper.left,
+  .component-carousel__slide-wrapper.right {
+    width: calc(100% - 84px);
+  }
+}
+
+.component-carousel__slide-wrapper.right-to-left {
+  direction: rtl;
+}
+
+.component-carousel__slide {
+  background: #fff;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.component-carousel__slide.center {
+  position: relative;
+}
+
+.component-carousel__slide img {
+  width: 100%;
+}
+
+.component-carousel__slide .component-carousel__description {
+  background: rgba(0, 0, 0, 0.4);
+  bottom: 70px;
+  color: #fff;
+  left: 0;
+  line-height: 1;
+  padding: 10px 20px;
+  position: absolute;
+  white-space: normal;
+}
+
+@media (max-width: 768px) {
+  .component-carousel__slide .component-carousel__description {
+    bottom: 45px;
+    font-size: .8em;
+    padding: 8px 15px;
+  }
+}

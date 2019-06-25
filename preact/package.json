@@ -1,0 +1,5 @@
+{
+  "main": "dist\\react-component-carousel.cjs.js",
+  "jsnext:main": "dist\\react-component-carousel.esm.js",
+  "module": "dist\\react-component-carousel.esm.js"
+}

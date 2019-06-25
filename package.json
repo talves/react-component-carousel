@@ -1,0 +1,60 @@
+{
+  "name": "react-component-carousel",
+  "version": "0.0.0-semantically-released",
+  "description": "React component to create a carousel of images and video",
+  "main": "dist/react-component-carousel.js",
+  "jsnext:main": "dist/react-component-carousel.esm.js",
+  "module": "dist/react-component-carousel.esm.js",
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6",
+    "yarn": ">=1"
+  },
+  "scripts": {
+    "start": "ada-scripts build --bundle --watch",
+    "build": "ada-scripts build --bundle --environment BUILD_NAME:ComponentCarousel",
+    "lint": "ada-scripts lint",
+    "test": "ada-scripts test",
+    "test:update": "npm test -- --updateSnapshot --coverage",
+    "validate": "ada-scripts validate",
+    "setup": "npm install && npm run validate -s"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "author": "Tony Alves <tony@3alves.com> (http://www.3alves.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.4.4",
+    "lodash-es": "^4.17.11",
+    "react-swipeable": "^5.2.3"
+  },
+  "devDependencies": {
+    "ada-scripts": "^2.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "rollup-plugin-css-only": "1.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "ada-scripts pre-commit"
+    }
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/ada-scripts/eslint.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talves/react-component-carousel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/talves/react-component-carousel/issues"
+  },
+  "homepage": "https://github.com/talves/react-component-carousel#readme"
+}

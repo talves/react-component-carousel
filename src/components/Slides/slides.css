@@ -1,0 +1,7 @@
+
+.component-carousel__slides {
+  line-height: 0;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}

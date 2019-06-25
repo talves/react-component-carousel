@@ -1,0 +1,17 @@
+.component-carousel__slide-status {
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  line-height: 1;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 4;
+}
+
+@media (max-width: 768px) {
+  .component-carousel__slide-status {
+    font-size: .8em;
+    padding: 5px 10px;
+  }
+}

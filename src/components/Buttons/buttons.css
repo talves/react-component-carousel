@@ -1,0 +1,176 @@
+.component-carousel__fullscreen-button,
+.component-carousel__play-button,
+.component-carousel__left-nav,
+.component-carousel__right-nav {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  z-index: 4;
+}
+
+.component-carousel__fullscreen-button::before,
+.component-carousel__play-button::before,
+.component-carousel__left-nav::before,
+.component-carousel__right-nav::before {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.component-carousel__fullscreen-button::before,
+.component-carousel__play-button::before,
+.component-carousel__left-nav::before,
+.component-carousel__right-nav::before {
+  color: #fff;
+  line-height: .7;
+  text-shadow: 0 2px 2px #1a1a1a;
+  transition: color .2s ease-out;
+}
+
+.component-carousel__fullscreen-button:hover::before,
+.component-carousel__play-button:hover::before,
+.component-carousel__left-nav:hover::before,
+.component-carousel__right-nav:hover::before {
+  color: #3392b7;
+}
+
+@media (max-width: 768px) {
+
+  .component-carousel__fullscreen-button:hover::before,
+  .component-carousel__play-button:hover::before,
+  .component-carousel__left-nav:hover::before,
+  .component-carousel__right-nav:hover::before {
+    color: #fff;
+  }
+}
+
+.component-carousel__fullscreen-button,
+.component-carousel__play-button {
+  bottom: 0;
+}
+
+.component-carousel__fullscreen-button::before,
+.component-carousel__play-button::before {
+  font-size: 2.7em;
+  padding: 15px 20px;
+  text-shadow: 0 1px 1px #1a1a1a;
+}
+
+@media (max-width: 768px) {
+
+  .component-carousel__fullscreen-button::before,
+  .component-carousel__play-button::before {
+    font-size: 2.4em;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .component-carousel__fullscreen-button::before,
+  .component-carousel__play-button::before {
+    font-size: 2em;
+  }
+}
+
+.component-carousel__fullscreen-button:hover::before,
+.component-carousel__play-button:hover::before {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+
+  .component-carousel__fullscreen-button:hover::before,
+  .component-carousel__play-button:hover::before {
+    transform: none;
+  }
+}
+
+.component-carousel__fullscreen-button {
+  right: 0;
+}
+
+.component-carousel__fullscreen-button::before {
+  content: "";
+}
+
+.component-carousel__fullscreen-button.active::before {
+  content: "";
+}
+
+.component-carousel__fullscreen-button.active:hover::before {
+  transform: scale(0.9);
+}
+
+.component-carousel__play-button {
+  left: 0;
+}
+
+.component-carousel__play-button::before {
+  content: "";
+}
+
+.component-carousel__play-button.active::before {
+  content: "";
+}
+
+.component-carousel__left-nav,
+.component-carousel__right-nav {
+  color: #fff;
+  font-size: 5em;
+  padding: 50px 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.component-carousel__left-nav[disabled],
+.component-carousel__right-nav[disabled] {
+  cursor: disabled;
+  opacity: .6;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+
+  .component-carousel__left-nav,
+  .component-carousel__right-nav {
+    font-size: 3.4em;
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .component-carousel__left-nav,
+  .component-carousel__right-nav {
+    font-size: 2.4em;
+    padding: 0 15px;
+  }
+}
+
+.component-carousel__left-nav {
+  left: 0;
+}
+
+.component-carousel__left-nav::before {
+  content: "";
+}
+
+.component-carousel__right-nav {
+  right: 0;
+}
+
+.component-carousel__right-nav::before {
+  content: "";
+}

@@ -1,0 +1,45 @@
+import React from 'react'
+
+function GalleryImage({
+  item,
+  onImageLoad,
+  onError,
+}) {
+
+  return (
+    <div className="component-carousel__image">
+      {item.imageSet ? (
+        <picture
+          onLoad={onImageLoad}
+          onError={onError}
+        >
+          {item.imageSet.map((source, index) => (
+            <source
+              key={index}
+              media={source.media}
+              srcSet={source.srcSet}
+              type={source.type}
+            />
+          ))}
+          <img alt={item.originalAlt} src={item.original} />
+        </picture>
+      ) : (
+        <img
+          src={item.original}
+          alt={item.originalAlt}
+          srcSet={item.srcSet}
+          sizes={item.sizes}
+          title={item.originalTitle}
+          onLoad={onImageLoad}
+          onError={onError}
+        />
+      )}
+
+      {item.description && (
+        <span className="component-carousel__description">{item.description}</span>
+      )}
+    </div>
+  )
+}
+
+export default GalleryImage
