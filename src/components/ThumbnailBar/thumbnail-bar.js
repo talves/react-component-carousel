@@ -89,7 +89,7 @@ function ThumbnailBar({
     }
   }
 
-  const handleTranslate = () => {
+  function handleTranslate() {
     if (currentIndex === 0) {
       setThumbsTranslate(0)
     } else {

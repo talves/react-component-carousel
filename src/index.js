@@ -1,6 +1,5 @@
 import React from 'react'
 import Throttle from 'lodash-es/throttle'
-import {Swipeable} from 'react-swipeable'
 import PropTypes from 'prop-types'
 
 import './component-carousel.css'
@@ -48,9 +47,7 @@ const ComponentCarousel = ({
   thumbnailPosition = 'bottom',
   startIndex = 0,
   slideDuration = 900,
-  swipingTransitionDuration = 0,
   slideInterval = 1000,
-  swipeThreshold = 30,
   renderLeftNav,
   renderRightNav,
   renderPlayPauseButton,
@@ -60,7 +57,6 @@ const ComponentCarousel = ({
   onPlay,
   onSlide,
   onScreenChange,
-  onImageClick,
   onImageLoad,
   onImageError,
   onThumbnailError,
@@ -107,10 +103,10 @@ const ComponentCarousel = ({
     if (carouselSize && carouselSize.width !== undefined) setCarouselWidth(carouselSize.width)
   }, [carouselSize])
 
+
   /**
    * Control functions
    */
-  const isActive = index => index === currentIndex
   // Can we slide!
   const canSlidePrevious = () => currentIndex > 0
   const canSlideNext = () => currentIndex < items.length - 1
@@ -119,8 +115,28 @@ const ComponentCarousel = ({
   const canSlideLeft = () =>
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
   const canNavigate = () => items.length >= 2
+  /**
+   * Slide duration changed, update throttle duration
+   */
+  const unthrottledSlideToIndex = (index, event) => {
+    if (!isTransitioning) {
+      const slideCount = items.length - 1
+      const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
 
-  const pauseAutoPlay = (callback = true) => {
+      setOffsetPercentage(0)
+      setTransitionStyle({
+        transition: `all ${slideDuration}ms ease-out`,
+      })
+      setCurrentIndex(nextIndex)
+    }
+  }
+  const slideToIndex = React.useCallback(
+    Throttle(unthrottledSlideToIndex, slideDuration, {
+      trailing: false,
+    }), [slideDuration])
+  const slideNext = event => slideToIndex(currentIndex + 1, event)
+
+  const pauseAutoPlay = () => {
     if (autoPlay) setAutoPlaying(false)
     if (autoIntervalId) {
       window.clearTimeout(autoIntervalId)
@@ -137,24 +153,29 @@ const ComponentCarousel = ({
     )
   }
 
-  const unthrottledSlideToIndex = (index, event) => {
-    if (!isTransitioning) {
-      const slideCount = items.length - 1
-      const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
-
-      setOffsetPercentage(0)
-      setTransitionStyle({
-        transition: `all ${slideDuration}ms ease-out`,
-      })
-      setCurrentIndex(nextIndex)
-    }
-  }
-
-  const slideNext = event => slideToIndex(currentIndex + 1, event)
-  const slidePrevious = event => slideToIndex(currentIndex - 1, event)
-
   const setModalFullscreen = state => {
     setIsModalFullscreen(state)
+  }
+
+  const exitFullScreen = () => {
+    if (document && useBrowserFullscreen) {
+      if (document.exitFullscreen && window.fullScreen) {
+        document.exitFullscreen()
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
+      } else {
+        // fallback to fullscreen modal for unsupported browsers
+        setModalFullscreen(false)
+      }
+    } else {
+      setModalFullscreen(false)
+    }
+
+      setIsFullscreen(false)
   }
 
   const handleFullScreen = () => {
@@ -183,27 +204,6 @@ const ComponentCarousel = ({
     }
 
     setIsFullscreen(true)
-  }
-
-  const exitFullScreen = () => {
-    if (document && useBrowserFullscreen) {
-      if (document.exitFullscreen && window.fullScreen) {
-        document.exitFullscreen()
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      } else {
-        // fallback to fullscreen modal for unsupported browsers
-        setModalFullscreen(false)
-      }
-    } else {
-      setModalFullscreen(false)
-    }
-
-      setIsFullscreen(false)
   }
 
   const handleScreenChange = () => {
@@ -258,49 +258,6 @@ const ComponentCarousel = ({
       .filter(name => typeof name === 'string' && name !== '')
       .join(' ')
 
-  React.useEffect(() => {
-    screenChangeEvents.forEach(eventName => {
-      document.addEventListener(eventName, handleScreenChange)
-    })
-    setClassNames(getClassNames())
-    setIsSlidePlaying(false)
-    setIsTransitioning(false)
-
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      document.removeEventListener('keydown', handleKeyDown)
-
-      screenChangeEvents.forEach(eventName => {
-        document.removeEventListener(eventName, handleScreenChange)
-      })
-
-      if (autoIntervalId) {
-        window.clearInterval(autoIntervalId)
-        setAutoIntervalId(null)
-      }
-
-      if (typeof onCleanup === 'function') onCleanup()
-    }
-  }, [])
-
-  /**
-   * Current index changed, update views
-   */
-  React.useEffect(() => {
-    const starting = previousIndex === undefined && currentIndex === startIndex
-    if (autoPlaying && typeof onPlay === 'function') onPlay(currentIndex)
-    setIsSlidePlaying(starting ? false : true)
-    setIsTransitioning(starting ? false : true)
-  }, [currentIndex])
-
-  /**
-   * Slide duration changed, update throttle duration
-   */
-  const slideToIndex = React.useCallback(
-    Throttle(unthrottledSlideToIndex, slideDuration, {
-      trailing: false,
-    }), [slideDuration])
-
   /**
    * Tracking arrow keys (left, right)
    *  handleKeyDown creates a cached version so it does not renew on rerender
@@ -335,6 +292,41 @@ const ComponentCarousel = ({
       default:
     }
   }, [keyClicked])
+
+  React.useEffect(() => {
+    screenChangeEvents.forEach(eventName => {
+      document.addEventListener(eventName, handleScreenChange)
+    })
+    setClassNames(getClassNames())
+    setIsSlidePlaying(false)
+    setIsTransitioning(false)
+
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      document.removeEventListener('keydown', handleKeyDown)
+
+      screenChangeEvents.forEach(eventName => {
+        document.removeEventListener(eventName, handleScreenChange)
+      })
+
+      if (autoIntervalId) {
+        window.clearInterval(autoIntervalId)
+        setAutoIntervalId(null)
+      }
+
+      if (typeof onCleanup === 'function') onCleanup()
+    }
+  }, [])
+
+  /**
+   * Current index changed, update views
+   */
+  React.useEffect(() => {
+    const starting = previousIndex === undefined && currentIndex === startIndex
+    if (autoPlaying && typeof onPlay === 'function') onPlay(currentIndex)
+    setIsSlidePlaying(starting ? false : true)
+    setIsTransitioning(starting ? false : true)
+  }, [currentIndex])
 
   /**
    * Auto playing (true/false)
@@ -389,7 +381,7 @@ const ComponentCarousel = ({
               renderThumbInner={renderThumbInner}
               onThumbClicked={handleIndexChange}
               slideOnThumbnailOver={slideOnThumbnailOver}
-              onError={onImageError || handleImageError}
+              onError={onThumbnailError || handleImageError}
               disabled={isSlidePlaying}
             />
           )}
@@ -411,6 +403,11 @@ const ComponentCarousel = ({
             defaultImage={defaultImage}
             transitionStyle={transitionStyle}
             useTranslate3D={useTranslate3D}
+            onMouseOver={onMouseOver}
+            onMouseLeave={onMouseLeave}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onTouchStart={onTouchStart}
             onSlideClick={onClick}
             onTransitionEnd={() => setIsTransitioning(false)}
             onImageError={onImageError}
@@ -526,14 +523,12 @@ ComponentCarousel.propTypes = {
   slideDuration: PropTypes.number,
   slideInterval: PropTypes.number,
   slideOnThumbnailOver: PropTypes.bool,
-  swipeThreshold: PropTypes.number,
-  swipingTransitionDuration: PropTypes.number,
   onSlide: PropTypes.func,
   onScreenChange: PropTypes.func,
   onPause: PropTypes.func,
   onPlay: PropTypes.func,
   onClick: PropTypes.func,
-  onClean: PropTypes.func,
+  onCleanup: PropTypes.func,
   onImageLoad: PropTypes.func,
   onImageError: PropTypes.func,
   onTouchMove: PropTypes.func,
@@ -544,6 +539,7 @@ ComponentCarousel.propTypes = {
   onThumbnailError: PropTypes.func,
   onThumbnailClick: PropTypes.func,
   renderCustomControls: PropTypes.func,
+  renderThumbInner: PropTypes.func,
   renderLeftNav: PropTypes.func,
   renderRightNav: PropTypes.func,
   renderPlayPauseButton: PropTypes.func,

@@ -11,8 +11,12 @@ const SlideWrapper = ({
   // const [size, setSize] = React.useState({ height: null, width: null })
   const componentSize = useComponentSize(wrapperRef); // A custom Hook
 
-  React.useEffect(() => {
+  function handleSizeChange() {
     if (typeof onSizeChange === 'function') onSizeChange({...componentSize})
+  }
+
+  React.useEffect(() => {
+    handleSizeChange()
   }, [componentSize])
 
   return (

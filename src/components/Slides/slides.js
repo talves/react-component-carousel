@@ -62,6 +62,9 @@ function Slides({
   onTransitionEnd,
   onImageError,
   onImageLoad,
+  onMouseLeave,
+  onMouseOver,
+  onFocus,
   useTranslate3D = true,
   swipeable = true,
   flickThreshold = 0.4,
@@ -70,12 +73,6 @@ function Slides({
   onSwipedRight,
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
-
-  React.useEffect(() => {
-    if (items) {
-      setLastIndex(items.length > 0 ? items.length - 1 : 0)
-    }
-  }, [])
 
   React.useEffect(() => {
     if (items.length) {
@@ -285,6 +282,9 @@ function Slides({
               slideStyle={Object.assign(slideStyle, transitionStyle)}
               item={item}
               className={`component-carousel__slide${alignment}${originalClass}`}
+              onMouseOver={onMouseOver}
+              onFocus={onFocus}
+              onMouseLeave={onMouseLeave}
               onSlideClick={onSlideClick}
               onSlideTransitionEnd={handleSlideTransitionEnd}
             >
@@ -311,6 +311,9 @@ Slides.propTypes = {
   onTransitionEnd: PropTypes.func,
   onImageError: PropTypes.func,
   onImageLoad: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+  onMouseOver: PropTypes.func,
+  onFocus: PropTypes.func,
   useTranslate3D: PropTypes.bool,
   swipeable: PropTypes.bool,
   flickThreshold: PropTypes.number,

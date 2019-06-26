@@ -12,26 +12,29 @@ function getSize(el) {
 }
 
 function useComponentSize(ref) {
-  let [ComponentSize, setComponentSize] = React.useState(getSize(ref ? ref.current : {}))
+  const [componentSize, setComponentSize] = React.useState(getSize(ref ? ref.current : {}))
 
   const handleResize = React.useCallback(
     function handleResize() {
       if (ref.current) {
         setComponentSize(getSize(ref.current))
       }
-    }, [ref])
+    },
+    [ref]
+  )
 
-    React.useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (!ref.current) return
+    const currentReference = ref.current
 
     handleResize()
 
     if (typeof ResizeObserver === 'function') {
       let resizeObserver = new ResizeObserver(() => handleResize())
-      resizeObserver.observe(ref.current)
+      resizeObserver.observe(currentReference)
 
       return () => {
-        resizeObserver.disconnect(ref.current)
+        resizeObserver.disconnect(currentReference)
         resizeObserver = null
       }
     } else {
@@ -43,7 +46,7 @@ function useComponentSize(ref) {
     }
   }, [ref.current])
 
-  return ComponentSize
+  return componentSize
 }
 
 export default useComponentSize

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function ThumbnailInner({
+const ThumbnailInner = ({
   item,
   onError
-}) {
+}) => {
   if (!item) return
   return (
     <div className="component-carousel__thumbnail-inner">

@@ -62,7 +62,6 @@ BulletBar.propTypes = {
   items: PropTypes.array.isRequired,
   selectedIndex: PropTypes.number,
   disabled: PropTypes.bool,
-  className: PropTypes.string,
   onClick: PropTypes.func,
 }
 
