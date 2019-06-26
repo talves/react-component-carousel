@@ -22,7 +22,7 @@ Wrapper.propTypes = {
   ]).isRequired,
 }
 
-function BulletBar({ items, onClick, selectedIndex, disabled, ...props }) {
+function BulletBar({ items, onClick, selectedIndex, disabled }) {
   const [currentIndex, setCurrentIndex] = React.useState(0)
 
   function handleIndexChange(index) {
