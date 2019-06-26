@@ -16,7 +16,6 @@ function ThumbnailBar({
   slideOnThumbnailOver = false,
   onError,
   disabled = false,
-  ...props
  }) {
   const wrapperRef = React.useRef(null)
   const containerRef = React.useRef(null)
@@ -58,13 +57,14 @@ function ThumbnailBar({
       }
 
       // scroll-x required per index change
-      let perIndexScroll = totalScroll / (thumbnailsCount - 1)
+      const perIndexScroll = totalScroll / (thumbnailsCount - 1)
 
       return indexDifference * perIndexScroll
     }
+    return 0
   }
 
-  const handleThumbnailClick = function(index) { 
+  const handleThumbnailClick = index => { 
     return event => {
       event.preventDefault()
       if (disabled) return
@@ -72,7 +72,7 @@ function ThumbnailBar({
     }
   }
 
-  const handleThumbnailMouseLeave = function(index) {
+  const handleThumbnailMouseLeave = index => {
     return event => {
       event.preventDefault()
       if (!slideOnThumbnailOver || disabled) return
@@ -80,7 +80,7 @@ function ThumbnailBar({
     }
   }
 
-  const handleThumbnailMouseOver = function(index) {
+  const handleThumbnailMouseOver = index => {
     return event => {
       event.preventDefault()
       if (!slideOnThumbnailOver || disabled) return
@@ -89,12 +89,12 @@ function ThumbnailBar({
     }
   }
 
-  const handleTranslate = function() {
+  const handleTranslate = () => {
     if (currentIndex === 0) {
       setThumbsTranslate(0)
     } else {
-      let indexDifference = Math.abs(previousIndex - currentIndex)
-      let scroll = getThumbsTranslate(indexDifference)
+      const indexDifference = Math.abs(previousIndex - currentIndex)
+      const scroll = getThumbsTranslate(indexDifference)
       if (scroll > 0) {
         if (previousIndex < currentIndex) {
           setThumbsTranslate(thumbsTranslate - scroll)
@@ -175,9 +175,6 @@ function ThumbnailBar({
     )
   }, [height])
 
-    /**
-   * Control functions
-   */
   const isActive = index => index === currentIndex
 
   return (
@@ -201,9 +198,10 @@ function ThumbnailBar({
               ? ` ${item.thumbnailClass}`
               : ''
             return (
-              <a
+              <div
                 key={index}
                 role="button"
+                tabIndex={index}
                 aria-pressed={isActive(index) ? 'true' : 'false'}
                 aria-label={`Go to Slide ${index + 1}`}
                 className={`component-carousel__thumbnail${isActive(index) ? ' active' : ''}${thumbnailClass}`}
@@ -211,9 +209,10 @@ function ThumbnailBar({
                 onMouseMove={slideOnThumbnailOver ? handleThumbnailMouseLeave(index) : undefined}
                 onMouseOver={slideOnThumbnailOver ? handleThumbnailMouseOver(index) : undefined}
                 onClick={!slideOnThumbnailOver ? handleThumbnailClick(index) : undefined}
+                onFocus={!slideOnThumbnailOver ? handleThumbnailClick(index) : undefined}
               >
                 {ItemRenderThumbInner({item, onError})}
-              </a>
+              </div>
             )
           })
         }
@@ -232,7 +231,7 @@ ThumbnailBar.propTypes = {
   currentIndex: PropTypes.number,
   height: PropTypes.number,
   renderThumbInner: PropTypes.func,
-  onThumbnailClick: PropTypes.func,
+  onThumbClicked: PropTypes.func,
   slideOnThumbnailOver: PropTypes.bool,
   onError:  PropTypes.func,
   disabled:  PropTypes.bool,
