@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Slide from './slide'
 import GalleryImage from '../gallery-image'
 import {Swipeable} from 'react-swipeable'
@@ -29,6 +30,19 @@ const Wrapper = ({
     <div className="component-carousel__slides">{children}</div>
   )
 }
+
+Wrapper.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired,
+  swipeable: PropTypes.bool,
+  flickThreshold: PropTypes.number,
+  preventDefaultTouchmoveEvent: PropTypes.bool,
+  onSwipedLeft: PropTypes.func,
+  onSwipedRight: PropTypes.func,
+}
+
 const LEFT = 'left'
 const CENTER = 'center'
 const RIGHT = 'right'
@@ -280,6 +294,26 @@ function Slides({
         })}
     </Wrapper>
   )
+}
+
+Slides.propTypes = {
+  items: PropTypes.array.isRequired,
+  currentIndex: PropTypes.number,
+  previousIndex: PropTypes.number,
+  isRTL: PropTypes.bool,
+  lazyLoad: PropTypes.bool,
+  continuous: PropTypes.bool,
+  offsetPercentage: PropTypes.number,
+  renderItem: PropTypes.func,
+  defaultImage: PropTypes.string,
+  transitionStyle: PropTypes.object,
+  onSlideClick: PropTypes.func,
+  onTransitionEnd: PropTypes.func,
+  onImageError: PropTypes.func,
+  onImageLoad: PropTypes.func,
+  useTranslate3D: PropTypes.bool,
+  swipeable: PropTypes.bool,
+  flickThreshold: PropTypes.number,
 }
 
 export default Slides

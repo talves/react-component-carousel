@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useComponentSize } from '../../utils/hooks'
 import ThumbnailInner from './thumbnail-inner'
 
@@ -220,6 +221,21 @@ function ThumbnailBar({
       </div>
     </div>
   )
+}
+
+ThumbnailBar.propTypes = {
+  items: PropTypes.array.isRequired,
+  useTranslate3D: PropTypes.bool,
+  isRTL: PropTypes.bool,
+  thumbnailPosition: PropTypes.string,
+  disableThumbnailScroll: PropTypes.bool,
+  currentIndex: PropTypes.number,
+  height: PropTypes.number,
+  renderThumbInner: PropTypes.func,
+  onThumbnailClick: PropTypes.func,
+  slideOnThumbnailOver: PropTypes.bool,
+  onError:  PropTypes.func,
+  disabled:  PropTypes.bool,
 }
 
 export default ThumbnailBar

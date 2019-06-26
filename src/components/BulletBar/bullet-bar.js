@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Wrapper = ({children}) => {
   return (
@@ -12,6 +13,13 @@ const Wrapper = ({children}) => {
       </div>
     </div>
   )
+}
+
+Wrapper.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired,
 }
 
 function BulletBar({ items, onClick, selectedIndex, disabled, ...props }) {
@@ -49,5 +57,14 @@ function BulletBar({ items, onClick, selectedIndex, disabled, ...props }) {
     })}
   </Wrapper>
 }
+
+BulletBar.propTypes = {
+  items: PropTypes.array.isRequired,
+  selectedIndex: PropTypes.number,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+}
+
 
 export default BulletBar

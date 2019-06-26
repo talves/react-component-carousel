@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useComponentSize } from '../utils/hooks'
 
 const SlideWrapper = ({
@@ -19,6 +20,14 @@ const SlideWrapper = ({
       {children}
     </div>
   )
+}
+
+SlideWrapper.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired,
+  onSizeChange: PropTypes.func
 }
 
 export default SlideWrapper

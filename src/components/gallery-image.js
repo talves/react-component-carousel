@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 function GalleryImage({
   item,
@@ -40,6 +41,14 @@ function GalleryImage({
       )}
     </div>
   )
+}
+
+GalleryImage.propTypes = {
+  item: PropTypes.oneOfType([
+    PropTypes.object
+  ]).isRequired,
+  onError: PropTypes.func,
+  onImageLoad: PropTypes.func
 }
 
 export default GalleryImage

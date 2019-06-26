@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 function ThumbnailInner({
   item,
@@ -20,6 +21,11 @@ function ThumbnailInner({
       )}
     </div>
   )
+}
+
+ThumbnailInner.propTypes = {
+  item: PropTypes.object,
+  onError: PropTypes.func
 }
 
 export default ThumbnailInner
