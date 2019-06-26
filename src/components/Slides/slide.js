@@ -13,7 +13,7 @@ function Slide({
   onTouchStart,
   onMouseOver,
   onMouseLeave,
-
+  onFocus,
 }) {
 
   return (
@@ -26,6 +26,7 @@ function Slide({
       onTouchEnd={onTouchEnd}
       onTouchStart={onTouchStart}
       onMouseOver={onMouseOver}
+      onFocus={onFocus}
       onMouseLeave={onMouseLeave}
       onTransitionEnd={onSlideTransitionEnd(index)}
       role={onSlideClick && 'button'}
@@ -50,6 +51,7 @@ Slide.propTypes = {
   onTouchStart: PropTypes.func,
   onMouseOver: PropTypes.func,
   onMouseLeave: PropTypes.func,
+  onFocus: PropTypes.func,
 }
 
 export default Slide

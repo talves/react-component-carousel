@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Slide from './slide'
-import GalleryImage from '../gallery-image'
 import {Swipeable} from 'react-swipeable'
+import GalleryImage from '../gallery-image'
+import Slide from './slide'
 
 const Wrapper = ({
   children,
@@ -68,7 +68,6 @@ function Slides({
   preventDefaultTouchmoveEvent = false,
   onSwipedLeft,
   onSwipedRight,
-  ...props
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
 
@@ -86,7 +85,7 @@ function Slides({
     }
   }, [items.length])
 
-  const handleSlideTransitionEnd = index => event => {
+  const handleSlideTransitionEnd = index => () => {
     if (index === lastIndex) {
       if (typeof onTransitionEnd === 'function') onTransitionEnd()
     }
@@ -251,6 +250,7 @@ function Slides({
             currentIndex !== endIndex))
       )
     }
+    return false
   }
 
   return (
@@ -314,6 +314,9 @@ Slides.propTypes = {
   useTranslate3D: PropTypes.bool,
   swipeable: PropTypes.bool,
   flickThreshold: PropTypes.number,
+  preventDefaultTouchmoveEvent: PropTypes.bool,
+  onSwipedLeft: PropTypes.func,
+  onSwipedRight: PropTypes.func,
 }
 
 export default Slides
