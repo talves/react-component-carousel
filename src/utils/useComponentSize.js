@@ -1,50 +1,66 @@
 import React from 'react'
 
 function getSize(el) {
-  if (!el) return {width: 0, height: 0}
+  if (!el) return {
+    width: 0,
+    height: 0,
+    scrollWidth: 0,
+    scrollHeight: 0,
+  }
 
   return {
     width: el.offsetWidth,
     height: el.offsetHeight,
     scrollWidth: el.scrollWidth,
-    scrollHeight: el.scrollHeight
+    scrollHeight: el.scrollHeight,
   }
 }
 
+const observerExists = typeof ResizeObserver === 'function'
+
 function useComponentSize(ref) {
-  const [componentSize, setComponentSize] = React.useState(getSize(ref ? ref.current : {}))
+  const [componentSize, setComponentSize] = React.useState(
+    getSize(ref && ref.current),
+  )
+  const [currentReference, setCurrentReference] = React.useState(
+    ref && ref.current ? ref.current : null,
+  )
 
   const handleResize = React.useCallback(
     function handleResize() {
-      if (ref.current) {
-        setComponentSize(getSize(ref.current))
+      if (currentReference) {
+        setComponentSize(getSize(currentReference))
       }
     },
-    [ref]
+    [currentReference],
   )
 
+  React.useEffect(() => {
+    setCurrentReference(ref.current ? ref.current : null)
+  }, [ref.current])
+
   React.useLayoutEffect(() => {
-    if (!ref.current) return
-    const currentReference = ref.current
+    if (currentReference === null) return
+    const cleanupReference = currentReference
+    const currentHandler = handleResize
+    let resizeObserver = null
+    handleResize() // setInitial size; usually (0,0)
 
-    handleResize()
-
-    if (typeof ResizeObserver === 'function') {
-      let resizeObserver = new ResizeObserver(() => handleResize())
+    if (observerExists) {
+      resizeObserver = new ResizeObserver(() => handleResize())
       resizeObserver.observe(currentReference)
-
-      return () => {
-        resizeObserver.disconnect(currentReference)
-        resizeObserver = null
-      }
     } else {
-      window.addEventListener('resize', handleResize)
-
-      return () => {
-        window.removeEventListener('resize', handleResize)
+      window.addEventListener('resize', currentHandler)
+    }
+    return function cleanup() {
+      if (observerExists) {
+        resizeObserver.disconnect(cleanupReference)
+        resizeObserver = null
+      } else {
+        window.removeEventListener('resize', currentHandler)
       }
     }
-  }, [ref.current])
+  }, [currentReference])
 
   return componentSize
 }
