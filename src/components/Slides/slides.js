@@ -47,6 +47,7 @@ const LEFT = 'left'
 const CENTER = 'center'
 const RIGHT = 'right'
 
+/*eslint max-statements: [2, 150, {ignoreTopLevelFunctions: true}]*/
 function Slides({
   items = [],
   currentIndex = 0,
@@ -142,57 +143,6 @@ function Slides({
     )
   }
 
-  const getTranslateXForTwoSlide = index => {
-    // For taking care of continuous swipe when there are only two slides
-    const baseTranslateX = -100 * currentIndex
-    let translateX = baseTranslateX + index * 100 + offsetPercentage
-
-    // when swiping make sure the slides are on the correct side
-    if (currentIndex === 0 && index === 1 && offsetPercentage > 0) {
-      translateX = -100 + offsetPercentage
-    } else if (currentIndex === 1 && index === 0 && offsetPercentage < 0) {
-      translateX = 100 + offsetPercentage
-    }
-
-    if (currentIndex !== previousIndex) {
-      // when swiped move the slide to the correct side
-      if (
-        previousIndex === 0 &&
-        index === 0 &&
-        offsetPercentage === 0 &&
-        swipeDirection === LEFT
-      ) {
-        translateX = 100
-      } else if (
-        previousIndex === 1 &&
-        index === 1 &&
-        offsetPercentage === 0 &&
-        swipeDirection === RIGHT
-      ) {
-        translateX = -100
-      }
-    } else {
-      // keep the slide on the correct slide even when not a swipe
-      if (
-        currentIndex === 0 &&
-        index === 1 &&
-        offsetPercentage === 0 &&
-        swipeDirection === LEFT
-      ) {
-        translateX = -100
-      } else if (
-        currentIndex === 1 &&
-        index === 0 &&
-        offsetPercentage === 0 &&
-        swipeDirection === RIGHT
-      ) {
-        translateX = 100
-      }
-    }
-
-    return translateX
-  }
-
   const getSlideStyle = index => {
     const baseTranslateX = -100 * currentIndex
 
@@ -211,11 +161,6 @@ function Slides({
         // if it is RTL the base line should be reversed
         translateX = 100 * (isRTL ? -1 : 1) + offsetPercentage
       }
-    }
-
-    // Special case when there are only 2 items with continuous on
-    if (continuous && lastIndex === 1) {
-      translateX = getTranslateXForTwoSlide(index)
     }
 
     let translate = `translate(${translateX}%, 0)`
