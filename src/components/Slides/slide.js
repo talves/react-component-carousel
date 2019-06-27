@@ -16,7 +16,7 @@ function Slide({
   onFocus,
 }) {
   const handleKeyDown = React.useCallback(event => {
-    const key = parseInt(event.keyCode || event.which || 0)
+    const key = parseInt(event.which || event.keyCode || 0, 10)
     if (typeof onSlideClick === 'function' && key === 32) onSlideClick(event)
   }, [onSlideClick])
 

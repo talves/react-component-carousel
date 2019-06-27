@@ -262,7 +262,7 @@ const ComponentCarousel = ({
    *  handleKeyDown creates a cached version so it does not renew on rerender
    */
   const handleKeyDown = React.useCallback(event => {
-    const key = parseInt(event.keyCode || event.which || 0)
+    const key = parseInt(event.which || event.keyCode || 0, 10)
     setKeyClicked(key)
   }, [])
   React.useEffect(() => {
