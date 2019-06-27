@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useComponentSize } from '../../utils/hooks'
 import ThumbnailInner from './thumbnail-inner'
 
+// eslint-disable-next-line max-lines-per-function
 function ThumbnailBar({
   useTranslate3D = true,
   isRTL = true,
@@ -210,6 +211,7 @@ function ThumbnailBar({
                 onMouseOver={slideOnThumbnailOver ? handleThumbnailMouseOver(index) : undefined}
                 onClick={handleThumbnailClick(index)}
                 onFocus={handleThumbnailClick(index)}
+                onKeyDown={() => {}}
               >
                 {itemRenderThumbInner({item, onError})}
               </div>
