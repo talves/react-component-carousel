@@ -73,6 +73,13 @@ function Slides({
   onSwipedRight,
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
+  const [swipeDirection, setSwipeDirection] = React.useState(null)
+
+  const handleSwiped = direction => event => {
+    setSwipeDirection(direction)
+    if (typeof onSwipedLeft === 'function' && direction === LEFT) onSwipedLeft(event)
+    if (typeof onSwipedRight === 'function' && direction === RIGHT) onSwipedRight(event)
+  }
 
   React.useEffect(() => {
     if (items.length) {
@@ -85,6 +92,7 @@ function Slides({
   const handleSlideTransitionEnd = index => () => {
     if (index === lastIndex) {
       if (typeof onTransitionEnd === 'function') onTransitionEnd()
+      setSwipeDirection(null)
     }
   }
 
@@ -139,14 +147,6 @@ function Slides({
     const baseTranslateX = -100 * currentIndex
     let translateX = baseTranslateX + index * 100 + offsetPercentage
 
-    let direction
-    // keep track of user swiping direction
-    if (offsetPercentage > 0) {
-      direction = LEFT
-    } else if (offsetPercentage < 0) {
-      direction = RIGHT
-    }
-
     // when swiping make sure the slides are on the correct side
     if (currentIndex === 0 && index === 1 && offsetPercentage > 0) {
       translateX = -100 + offsetPercentage
@@ -160,14 +160,14 @@ function Slides({
         previousIndex === 0 &&
         index === 0 &&
         offsetPercentage === 0 &&
-        direction === LEFT
+        swipeDirection === LEFT
       ) {
         translateX = 100
       } else if (
         previousIndex === 1 &&
         index === 1 &&
         offsetPercentage === 0 &&
-        direction === RIGHT
+        swipeDirection === RIGHT
       ) {
         translateX = -100
       }
@@ -177,14 +177,14 @@ function Slides({
         currentIndex === 0 &&
         index === 1 &&
         offsetPercentage === 0 &&
-        direction === LEFT
+        swipeDirection === LEFT
       ) {
         translateX = -100
       } else if (
         currentIndex === 1 &&
         index === 0 &&
         offsetPercentage === 0 &&
-        direction === RIGHT
+        swipeDirection === RIGHT
       ) {
         translateX = 100
       }
@@ -255,8 +255,8 @@ function Slides({
       swipeable={swipeable && lastIndex >= 1}
       flickThreshold={flickThreshold}
       preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent}
-      onSwipedLeft={onSwipedLeft}
-      onSwipedRight={onSwipedRight}
+      onSwipedLeft={handleSwiped(LEFT)}
+      onSwipedRight={handleSwiped(RIGHT)}
     >
       {items &&
         items.map((item, index) => {
