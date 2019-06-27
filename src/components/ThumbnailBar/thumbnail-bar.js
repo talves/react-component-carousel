@@ -192,7 +192,7 @@ function ThumbnailBar({
           aria-label={`Thumbnail Navigation on ${thumbnailPosition}`}
         >
           {items && items.map((item, index) => {
-            const ItemRenderThumbInner =
+            const itemRenderThumbInner =
               item.renderThumbInner || renderThumbInner || ThumbnailInner
             const thumbnailClass = item.thumbnailClass
               ? ` ${item.thumbnailClass}`
@@ -208,10 +208,10 @@ function ThumbnailBar({
                 onMouseLeave={slideOnThumbnailOver ? handleThumbnailMouseLeave(index) : undefined}
                 onMouseMove={slideOnThumbnailOver ? handleThumbnailMouseLeave(index) : undefined}
                 onMouseOver={slideOnThumbnailOver ? handleThumbnailMouseOver(index) : undefined}
-                onClick={!slideOnThumbnailOver ? handleThumbnailClick(index) : undefined}
-                onFocus={!slideOnThumbnailOver ? handleThumbnailClick(index) : undefined}
+                onClick={handleThumbnailClick(index)}
+                onFocus={handleThumbnailClick(index)}
               >
-                {ItemRenderThumbInner({item, onError})}
+                {itemRenderThumbInner({item, onError})}
               </div>
             )
           })
