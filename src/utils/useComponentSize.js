@@ -40,27 +40,26 @@ function useComponentSize(ref) {
   }, [ref.current])
 
   React.useLayoutEffect(() => {
-    if (currentReference === null) return
     const cleanupReference = currentReference
     const currentHandler = handleResize
     let resizeObserver = null
     handleResize() // setInitial size; usually (0,0)
 
-    if (observerExists) {
+    if (observerExists && cleanupReference) {
       resizeObserver = new ResizeObserver(() => handleResize())
-      resizeObserver.observe(currentReference)
+      resizeObserver.observe(cleanupReference)
     } else {
       window.addEventListener('resize', currentHandler)
     }
     return function cleanup() {
-      if (observerExists) {
+      if (observerExists && cleanupReference) {
         resizeObserver.disconnect(cleanupReference)
         resizeObserver = null
       } else {
         window.removeEventListener('resize', currentHandler)
       }
     }
-  }, [currentReference])
+  }, [handleResize])
 
   return componentSize
 }
