@@ -1,5 +1,5 @@
 import React from 'react'
-import Throttle from 'lodash-es/throttle'
+import throttle from 'lodash-es/throttle'
 import PropTypes from 'prop-types'
 
 import './component-carousel.css'
@@ -23,6 +23,7 @@ const LEFT_ARROW = 37
 const RIGHT_ARROW = 39
 const ESC_KEY = 27
 
+// eslint-disable-next-line max-lines-per-function, max-statements, complexity
 const ComponentCarousel = ({
   items = [],
   showNav = true,
@@ -130,7 +131,7 @@ const ComponentCarousel = ({
     }
   }
   const slideToIndex = React.useCallback(
-    Throttle(unthrottledSlideToIndex, slideDuration, {
+    throttle(unthrottledSlideToIndex, slideDuration, {
       trailing: false,
     }), [slideDuration])
   const slideNext = event => slideToIndex(currentIndex + 1, event)
@@ -240,7 +241,7 @@ const ComponentCarousel = ({
 
     pauseAutoPlay()
     slideToIndex(index)
-    if (typeof onThumbnailClick === 'function') onThumbnailClick(event, index)
+    if (typeof onThumbnailClick === 'function') onThumbnailClick(index)
   }
 
   const slideLeft = () =>
