@@ -47,7 +47,7 @@ const LEFT = 'left'
 const CENTER = 'center'
 const RIGHT = 'right'
 
-/*eslint max-statements: ["error", 100, { "ignoreTopLevelFunctions": true }]*/
+// eslint-disable-next-line max-lines-per-function
 function Slides({
   items = [],
   currentIndex = 0,
@@ -72,6 +72,7 @@ function Slides({
   preventDefaultTouchmoveEvent = false,
   onSwipedLeft,
   onSwipedRight,
+  onSwipeDirection,
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
   const [swipeDirection, setSwipeDirection] = React.useState({direction: null, to:currentIndex, from: previousIndex})
@@ -94,7 +95,7 @@ function Slides({
     }
   }, [previousIndex, currentIndex])
   React.useEffect(() => {
-    console.debug(`swipeDirection: ${JSON.stringify(swipeDirection)}`)
+    if (typeof onSwipeDirection === 'function') onSwipeDirection(swipeDirection)
   }, [swipeDirection])
 
   React.useEffect(() => {
@@ -279,6 +280,7 @@ Slides.propTypes = {
   preventDefaultTouchmoveEvent: PropTypes.bool,
   onSwipedLeft: PropTypes.func,
   onSwipedRight: PropTypes.func,
+  onSwipeDirection: PropTypes.func,
 }
 
 export default Slides
