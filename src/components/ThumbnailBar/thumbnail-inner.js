@@ -5,7 +5,6 @@ const ThumbnailInner = ({
   item,
   onError
 }) => {
-  if (!item) return
   return (
     <div className="component-carousel__thumbnail-inner">
       <img
@@ -24,7 +23,7 @@ const ThumbnailInner = ({
 }
 
 ThumbnailInner.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   onError: PropTypes.func
 }
 
