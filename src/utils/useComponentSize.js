@@ -37,7 +37,7 @@ function useComponentSize(ref) {
 
   React.useEffect(() => {
     setCurrentReference(ref.current ? ref.current : null)
-  }, [ref.current])
+  }, [ref])
 
   React.useLayoutEffect(() => {
     const cleanupReference = currentReference
