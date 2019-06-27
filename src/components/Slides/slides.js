@@ -47,7 +47,7 @@ const LEFT = 'left'
 const CENTER = 'center'
 const RIGHT = 'right'
 
-/*eslint max-statements: [2, 150, {ignoreTopLevelFunctions: true}]*/
+/*eslint max-statements: ["error", 100, { "ignoreTopLevelFunctions": true }]*/
 function Slides({
   items = [],
   currentIndex = 0,
@@ -74,13 +74,28 @@ function Slides({
   onSwipedRight,
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
-  const [swipeDirection, setSwipeDirection] = React.useState(null)
+  const [swipeDirection, setSwipeDirection] = React.useState({direction: null, to:currentIndex, from: previousIndex})
 
   const handleSwiped = direction => event => {
-    setSwipeDirection(direction)
     if (typeof onSwipedLeft === 'function' && direction === LEFT) onSwipedLeft(event)
     if (typeof onSwipedRight === 'function' && direction === RIGHT) onSwipedRight(event)
   }
+
+  React.useEffect(() => {
+    if (previousIndex !== currentIndex) {
+      const swipedRight = isRTL ? LEFT : RIGHT
+      const swipedLeft = isRTL ? RIGHT : LEFT
+      const firstToLast = (previousIndex === 0 && currentIndex === lastIndex)
+      const lastToFirst = (currentIndex === 0 && previousIndex === lastIndex)
+      const swipedDirection = (firstToLast && continuous)
+        ? swipedRight : (lastToFirst && continuous) ? swipedLeft :
+        (previousIndex < currentIndex) ? swipedLeft : swipedRight
+      setSwipeDirection({direction: swipedDirection, to:currentIndex, from: previousIndex})
+    }
+  }, [previousIndex, currentIndex])
+  React.useEffect(() => {
+    console.debug(`swipeDirection: ${JSON.stringify(swipeDirection)}`)
+  }, [swipeDirection])
 
   React.useEffect(() => {
     if (items.length) {
@@ -93,7 +108,6 @@ function Slides({
   const handleSlideTransitionEnd = index => () => {
     if (index === lastIndex) {
       if (typeof onTransitionEnd === 'function') onTransitionEnd()
-      setSwipeDirection(null)
     }
   }
 
