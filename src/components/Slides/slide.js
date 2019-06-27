@@ -15,6 +15,10 @@ function Slide({
   onMouseLeave,
   onFocus,
 }) {
+  const handleKeyDown = React.useCallback(event => {
+    const key = parseInt(event.keyCode || event.which || 0)
+    if (typeof onSlideClick === 'function' && key === 32) onSlideClick(event)
+  }, [onSlideClick])
 
   return (
     <div
@@ -22,6 +26,7 @@ function Slide({
       className={className}
       style={slideStyle}
       onClick={onSlideClick}
+      onKeyDown={handleKeyDown}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
       onTouchStart={onTouchStart}
