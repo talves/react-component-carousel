@@ -52,6 +52,7 @@ const ComponentCarousel = ({
   renderRightNav,
   renderPlayPauseButton,
   renderFullscreenButton,
+  onCarouselResize,
   onClick,
   onPause,
   onPlay,
@@ -67,6 +68,7 @@ const ComponentCarousel = ({
   onTouchEnd,
   onTouchStart,
   onMouseOver,
+  onFocus,
   onMouseLeave,
   onThumbnailClick,
   onCleanup,
@@ -76,7 +78,6 @@ const ComponentCarousel = ({
   const [currentIndex, setCurrentIndex] = React.useState(startIndex)
   const previousIndex = usePrevious(currentIndex)
   const [offsetPercentage, setOffsetPercentage] = React.useState(0)
-  const [carouselWidth, setCarouselWidth] = React.useState(0)
   const [transitionStyle, setTransitionStyle] = React.useState({})
   const [isModalFullscreen, setIsModalFullscreen] = React.useState(false)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
@@ -100,7 +101,7 @@ const ComponentCarousel = ({
   const imageCarousel = React.useRef(null)
   const carouselSize = useComponentSize(imageCarousel)
   React.useEffect(() => {
-    if (carouselSize && carouselSize.width !== undefined) setCarouselWidth(carouselSize.width)
+    if (carouselSize && typeof onCarouselResize === 'function') onCarouselResize(carouselSize)
   }, [carouselSize])
 
 
@@ -115,10 +116,8 @@ const ComponentCarousel = ({
   const canSlideLeft = () =>
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
   const canNavigate = () => items.length >= 2
-  /**
-   * Slide duration changed, update throttle duration
-   */
-  const unthrottledSlideToIndex = (index, event) => {
+  //Slide duration changed, update throttle duration
+  const unthrottledSlideToIndex = (index) => {
     if (!isTransitioning) {
       const slideCount = items.length - 1
       const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
@@ -244,9 +243,9 @@ const ComponentCarousel = ({
     if (typeof onThumbnailClick === 'function') onThumbnailClick(event, index)
   }
 
-  const slideLeft = event =>
+  const slideLeft = () =>
     handleIndexChange(isRTL ? currentIndex + 1 : currentIndex - 1)
-  const slideRight = event =>
+  const slideRight = () =>
     handleIndexChange(isRTL ? currentIndex - 1 : currentIndex + 1)
 
   const getClassNames = () =>
@@ -276,12 +275,12 @@ const ComponentCarousel = ({
     switch (keyClicked) {
       case LEFT_ARROW:
         if (canSlideLeft() && !isSlidePlaying) {
-          slideLeft(event)
+          slideLeft()
         }
         break
       case RIGHT_ARROW:
         if (canSlideRight() && !isSlidePlaying) {
-          slideRight(event)
+          slideRight()
         }
         break
       case ESC_KEY:
@@ -324,8 +323,8 @@ const ComponentCarousel = ({
   React.useEffect(() => {
     const starting = previousIndex === undefined && currentIndex === startIndex
     if (autoPlaying && typeof onPlay === 'function') onPlay(currentIndex)
-    setIsSlidePlaying(starting ? false : true)
-    setIsTransitioning(starting ? false : true)
+    setIsSlidePlaying(!starting)
+    setIsTransitioning(!starting)
   }, [currentIndex])
 
   /**
@@ -341,12 +340,9 @@ const ComponentCarousel = ({
       onSlide({index: currentIndex, isPlaying: isSlidePlaying})
   }, [isSlidePlaying])
   React.useEffect(() => {
-    if (autoPlaying) {
-      slideNext() // Continue
-    } else {
-      // Paused, because autoPlaying toggled off
-      if (typeof onPause === 'function') onPause(currentIndex)
-    }
+    if (autoPlaying) slideNext() // Continue
+    // Paused, because autoPlaying toggled off
+    if (!autoPlaying && typeof onPause === 'function') onPause(currentIndex)
   }, [autoPlaying])
   React.useEffect(() => {
     if (!isTransitioning) {
@@ -404,6 +400,7 @@ const ComponentCarousel = ({
             transitionStyle={transitionStyle}
             useTranslate3D={useTranslate3D}
             onMouseOver={onMouseOver}
+            onFocus={onFocus}
             onMouseLeave={onMouseLeave}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -523,6 +520,7 @@ ComponentCarousel.propTypes = {
   slideDuration: PropTypes.number,
   slideInterval: PropTypes.number,
   slideOnThumbnailOver: PropTypes.bool,
+  onCarouselResize: PropTypes.func,
   onSlide: PropTypes.func,
   onScreenChange: PropTypes.func,
   onPause: PropTypes.func,
@@ -535,6 +533,7 @@ ComponentCarousel.propTypes = {
   onTouchEnd: PropTypes.func,
   onTouchStart: PropTypes.func,
   onMouseOver: PropTypes.func,
+  onFocus: PropTypes.func,
   onMouseLeave: PropTypes.func,
   onThumbnailError: PropTypes.func,
   onThumbnailClick: PropTypes.func,
