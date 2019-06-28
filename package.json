@@ -15,6 +15,7 @@
     "build": "ada-scripts build --bundle --environment BUILD_NAME:ComponentCarousel",
     "lint": "ada-scripts lint",
     "test": "ada-scripts test",
+    "test:build": "ada-scripts test --config other/jest.config.js --no-watch",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "ada-scripts validate",
     "setup": "npm install && npm run validate -s"
