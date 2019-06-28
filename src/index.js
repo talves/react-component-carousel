@@ -1,5 +1,4 @@
 import React from 'react'
-import throttle from 'lodash-es/throttle'
 import PropTypes from 'prop-types'
 
 import './component-carousel.css'
@@ -118,7 +117,7 @@ const ComponentCarousel = ({
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
   const canNavigate = () => items.length >= 2
   //Slide duration changed, update throttle duration
-  const unthrottledSlideToIndex = (index) => {
+  const slideToIndex = (index) => {
     if (!isTransitioning) {
       const slideCount = items.length - 1
       const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
@@ -130,10 +129,6 @@ const ComponentCarousel = ({
       setCurrentIndex(nextIndex)
     }
   }
-  const slideToIndex = React.useCallback(
-    throttle(unthrottledSlideToIndex, slideDuration, {
-      trailing: false,
-    }), [slideDuration])
   const slideNext = event => slideToIndex(currentIndex + 1, event)
 
   const pauseAutoPlay = () => {
