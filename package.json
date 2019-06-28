@@ -2,7 +2,7 @@
   "name": "react-component-carousel",
   "version": "0.0.0-semantically-released",
   "description": "React component to create a carousel of images and video",
-  "main": "dist/react-component-carousel.js",
+  "main": "dist/react-component-carousel.cjs.js",
   "jsnext:main": "dist/react-component-carousel.esm.js",
   "module": "dist/react-component-carousel.esm.js",
   "engines": {
@@ -15,7 +15,6 @@
     "build": "ada-scripts build --bundle --environment BUILD_NAME:ComponentCarousel",
     "lint": "ada-scripts lint",
     "test": "ada-scripts test",
-    "test:build": "ada-scripts test --config other/jest.config.js --no-watch",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "ada-scripts validate",
     "setup": "npm install && npm run validate -s"
@@ -38,8 +37,8 @@
     "rollup-plugin-peer-deps-external": "^2.2.0"
   },
   "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6"
+    "prop-types": ">=15.7",
+    "react": ">=16.8"
   },
   "husky": {
     "hooks": {
