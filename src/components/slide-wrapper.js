@@ -1,23 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useComponentSize } from '../utils/hooks'
+import {useComponentSize} from '../utils/hooks'
 
-const SlideWrapper = ({
-  children,
-  onSizeChange,
-  ...props
- }) => {
+const SlideWrapper = ({children, onSizeChange, ...props}) => {
   const wrapperRef = React.useRef(null)
   // const [size, setSize] = React.useState({ height: null, width: null })
-  const componentSize = useComponentSize(wrapperRef); // A custom Hook
+  const componentSize = useComponentSize(wrapperRef) // A custom Hook
 
-  function handleSizeChange() {
-    if (typeof onSizeChange === 'function') onSizeChange({...componentSize})
-  }
-
+  const handleSizeChange = React.useCallback(
+    size => {
+      if (size && typeof onSizeChange === 'function') {
+        onSizeChange(size)
+      }
+    },
+    [onSizeChange],
+  )
   React.useEffect(() => {
-    handleSizeChange()
-  }, [componentSize])
+    handleSizeChange(componentSize)
+  }, [componentSize, handleSizeChange])
 
   return (
     <div ref={wrapperRef} {...props}>
@@ -29,9 +29,9 @@ const SlideWrapper = ({
 SlideWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]).isRequired,
-  onSizeChange: PropTypes.func
+  onSizeChange: PropTypes.func,
 }
 
 export default SlideWrapper
