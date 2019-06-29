@@ -1,12 +1,13 @@
 import React from 'react'
 
 function getSize(el) {
-  if (!el) return {
-    width: 0,
-    height: 0,
-    scrollWidth: 0,
-    scrollHeight: 0,
-  }
+  if (!el)
+    return {
+      width: 0,
+      height: 0,
+      scrollWidth: 0,
+      scrollHeight: 0,
+    }
 
   return {
     width: el.offsetWidth,
@@ -59,7 +60,7 @@ function useComponentSize(ref) {
         window.removeEventListener('resize', currentHandler)
       }
     }
-  }, [handleResize])
+  }, [currentReference, handleResize])
 
   return componentSize
 }
