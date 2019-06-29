@@ -126,7 +126,6 @@ const ComponentCarousel = ({
     continuous || (isRTL ? canSlidePrevious() : canSlideNext())
   const canSlideLeft = () =>
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
-  const canNavigate = () => items.length >= 2
   //Slide duration changed, update throttle duration
   const slideToIndex = index => {
     if (!isTransitioning) {
@@ -293,6 +292,7 @@ const ComponentCarousel = ({
         break
       default:
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyClicked])
 
   React.useEffect(() => {
@@ -327,11 +327,20 @@ const ComponentCarousel = ({
   /**
    * Current index changed, update views
    */
+  const handleOnPlay = React.useCallback(
+    index => {
+      if (typeof onPlay === 'function') onPlay(index)
+    },
+    [onPlay],
+  )
+  React.useEffect(() => {
+    if (autoPlaying) handleOnPlay(currentIndex)
+  }, [autoPlaying, handleOnPlay, currentIndex])
   React.useEffect(() => {
     const starting = previousIndex === undefined && currentIndex === startIndex
-    if (autoPlaying && typeof onPlay === 'function') onPlay(currentIndex)
     setIsSlidePlaying(!starting)
     setIsTransitioning(!starting)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex])
 
   /**
@@ -442,7 +451,7 @@ const ComponentCarousel = ({
               total={items.length}
             />
           )}
-          {showNav && canNavigate() && (
+          {showNav && items.length >= 2 && (
             <span key="navigation">
               <NavButton
                 direction={`${LEFT}`}
