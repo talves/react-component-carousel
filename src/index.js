@@ -8,7 +8,11 @@ import SlideWrapper from './components/slide-wrapper'
 import Slides from './components/Slides'
 import ThumbnailBar from './components/ThumbnailBar'
 import BulletBar from './components/BulletBar'
-import { FullscreenButton, NavButton, PlayPauseButton } from './components/Buttons'
+import {
+  FullscreenButton,
+  NavButton,
+  PlayPauseButton,
+} from './components/Buttons'
 import SlideStatus from './components/SlideStatus'
 
 const screenChangeEvents = [
@@ -21,6 +25,8 @@ const NO_KEY = -1
 const LEFT_ARROW = 37
 const RIGHT_ARROW = 39
 const ESC_KEY = 27
+const LEFT = 'left'
+const RIGHT = 'right'
 
 // eslint-disable-next-line max-lines-per-function, max-statements, complexity
 const ComponentCarousel = ({
@@ -101,9 +107,9 @@ const ComponentCarousel = ({
   const imageCarousel = React.useRef(null)
   const carouselSize = useComponentSize(imageCarousel)
   React.useEffect(() => {
-    if (carouselSize && typeof onCarouselResize === 'function') onCarouselResize(carouselSize)
+    if (carouselSize && typeof onCarouselResize === 'function')
+      onCarouselResize(carouselSize)
   }, [carouselSize])
-
 
   /**
    * Control functions
@@ -117,7 +123,7 @@ const ComponentCarousel = ({
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
   const canNavigate = () => items.length >= 2
   //Slide duration changed, update throttle duration
-  const slideToIndex = (index) => {
+  const slideToIndex = index => {
     if (!isTransitioning) {
       const slideCount = items.length - 1
       const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
@@ -170,7 +176,7 @@ const ComponentCarousel = ({
       setModalFullscreen(false)
     }
 
-      setIsFullscreen(false)
+    setIsFullscreen(false)
   }
 
   const handleFullScreen = () => {
@@ -244,15 +250,6 @@ const ComponentCarousel = ({
   const slideRight = () =>
     handleIndexChange(isRTL ? currentIndex - 1 : currentIndex + 1)
 
-  const getClassNames = () =>
-    [
-      'component-carousel',
-      additionalClass,
-      isModalFullscreen ? 'fullscreen-modal' : '',
-    ]
-      .filter(name => typeof name === 'string' && name !== '')
-      .join(' ')
-
   /**
    * Tracking arrow keys (left, right)
    *  handleKeyDown creates a cached version so it does not renew on rerender
@@ -292,7 +289,6 @@ const ComponentCarousel = ({
     screenChangeEvents.forEach(eventName => {
       document.addEventListener(eventName, handleScreenChange)
     })
-    setClassNames(getClassNames())
     setIsSlidePlaying(false)
     setIsTransitioning(false)
 
@@ -352,13 +348,23 @@ const ComponentCarousel = ({
    * Class Names
    */
   React.useEffect(() => {
-    setClassNames(getClassNames())
+    setClassNames(
+      [
+        'component-carousel',
+        additionalClass,
+        isModalFullscreen ? 'fullscreen-modal' : '',
+      ]
+        .filter(name => typeof name === 'string' && name !== '')
+        .join(' '),
+    )
   }, [additionalClass, isModalFullscreen])
 
   return (
     <div ref={imageCarousel} className={classNames} aria-live="polite">
       <div
-        className={`component-carousel__content${isFullscreen ? ' fullscreen' : ''}`}
+        className={`component-carousel__content${
+          isFullscreen ? ' fullscreen' : ''
+        }`}
       >
         {showThumbnails &&
           (thumbnailPosition === 'top' || thumbnailPosition === 'left') && (
@@ -409,7 +415,7 @@ const ComponentCarousel = ({
             flickThreshold={flickThreshold}
             preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent}
             onSwipedLeft={() => slideRight()}
-            onSwipedRight={() => slideLeft()}      
+            onSwipedRight={() => slideLeft()}
           />
 
           {renderCustomControls && renderCustomControls()}
@@ -424,17 +430,17 @@ const ComponentCarousel = ({
           {showNav && canNavigate() && (
             <span key="navigation">
               <NavButton
-                direction={'left'}
+                direction={`${LEFT}`}
                 renderer={renderLeftNav}
-                className={`component-carousel__left-nav`}
+                className={`component-carousel__${LEFT}-nav`}
                 onClick={slideLeft}
                 disabled={!canSlideLeft()}
               />
 
               <NavButton
-                direction={'right'}
+                direction={`${RIGHT}`}
                 renderer={renderRightNav}
-                className={`component-carousel__right-nav`}
+                className={`component-carousel__${RIGHT}-nav`}
                 onClick={slideRight}
                 disabled={!canSlideRight()}
               />
