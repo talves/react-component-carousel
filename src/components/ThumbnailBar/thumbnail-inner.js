@@ -1,10 +1,8 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const ThumbnailInner = ({
-  item,
-  onError
-}) => {
+const ThumbnailInner = ({item, onError}) => {
   return (
     <div className="component-carousel__thumbnail-inner">
       <img
@@ -24,7 +22,7 @@ const ThumbnailInner = ({
 
 ThumbnailInner.propTypes = {
   item: PropTypes.object.isRequired,
-  onError: PropTypes.func
+  onError: PropTypes.func,
 }
 
 export default ThumbnailInner
