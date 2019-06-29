@@ -30,15 +30,20 @@
     "react-swipeable": "^5.2.3"
   },
   "devDependencies": {
+    "@testing-library/react": "^8.0.4",
+    "@testing-library/react-hooks": "^1.0.4",
     "ada-scripts": "^2.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "rollup-plugin-css-only": "1.0.0",
+    "react-dom": "^16.8.6",
+    "react-test-renderer": "^16.8.6",
+    "rollup-plugin-css-only": "^1.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.0"
   },
   "peerDependencies": {
     "prop-types": ">=15.7",
-    "react": ">=16.8"
+    "react": ">=16.8",
+    "react-dom": ">=16.8"
   },
   "husky": {
     "hooks": {
