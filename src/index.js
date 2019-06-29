@@ -261,11 +261,14 @@ const ComponentCarousel = ({
     setKeyClicked(key)
   }, [])
   React.useEffect(() => {
-    document.removeEventListener('keydown', handleKeyDown)
+    const handler = handleKeyDown
     if (!disableArrowKeys) {
-      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener('keydown', handler)
     }
-  }, [disableArrowKeys])
+    return function cleanup() {
+      document.removeEventListener('keydown', handler)
+    }
+  }, [disableArrowKeys, handleKeyDown])
   React.useEffect(() => {
     switch (keyClicked) {
       case LEFT_ARROW:
@@ -312,11 +315,9 @@ const ComponentCarousel = ({
 
     // Specify how to clean up after this effect:
     return function cleanup() {
-      document.removeEventListener('keydown', handleKeyDown)
-
       if (typeof onCleanup === 'function') onCleanup()
     }
-  }, [handleKeyDown, onCleanup])
+  }, [onCleanup])
 
   /**
    * Current index changed, update views
