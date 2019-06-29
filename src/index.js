@@ -106,10 +106,15 @@ const ComponentCarousel = ({
    */
   const imageCarousel = React.useRef(null)
   const carouselSize = useComponentSize(imageCarousel)
+  const handleCarouselResize = React.useCallback(
+    size => {
+      if (typeof onCarouselResize === 'function') onCarouselResize(size)
+    },
+    [onCarouselResize],
+  )
   React.useEffect(() => {
-    if (carouselSize && typeof onCarouselResize === 'function')
-      onCarouselResize(carouselSize)
-  }, [carouselSize])
+    if (carouselSize) handleCarouselResize(carouselSize)
+  }, [carouselSize, handleCarouselResize])
 
   /**
    * Control functions
