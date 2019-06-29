@@ -34,7 +34,7 @@ const Wrapper = ({
 Wrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]).isRequired,
   swipeable: PropTypes.bool,
   flickThreshold: PropTypes.number,
@@ -75,28 +75,49 @@ function Slides({
   onSwipeDirection,
 }) {
   const [lastIndex, setLastIndex] = React.useState(0)
-  const [swipeDirection, setSwipeDirection] = React.useState({direction: null, to:currentIndex, from: previousIndex})
+  const [swipeDirection, setSwipeDirection] = React.useState({
+    direction: null,
+    to: currentIndex,
+    from: previousIndex,
+  })
 
   const handleSwiped = direction => event => {
-    if (typeof onSwipedLeft === 'function' && direction === LEFT) onSwipedLeft(event)
-    if (typeof onSwipedRight === 'function' && direction === RIGHT) onSwipedRight(event)
+    if (typeof onSwipedLeft === 'function' && direction === LEFT)
+      onSwipedLeft(event)
+    if (typeof onSwipedRight === 'function' && direction === RIGHT)
+      onSwipedRight(event)
   }
 
   React.useEffect(() => {
     if (previousIndex !== currentIndex) {
       const swipedRight = isRTL ? LEFT : RIGHT
       const swipedLeft = isRTL ? RIGHT : LEFT
-      const firstToLast = (previousIndex === 0 && currentIndex === lastIndex)
-      const lastToFirst = (currentIndex === 0 && previousIndex === lastIndex)
-      const swipedDirection = (firstToLast && continuous)
-        ? swipedRight : (lastToFirst && continuous) ? swipedLeft :
-        (previousIndex < currentIndex) ? swipedLeft : swipedRight
-      setSwipeDirection({direction: swipedDirection, to:currentIndex, from: previousIndex})
+      const firstToLast = previousIndex === 0 && currentIndex === lastIndex
+      const lastToFirst = currentIndex === 0 && previousIndex === lastIndex
+      const swipedDirection =
+        firstToLast && continuous
+          ? swipedRight
+          : lastToFirst && continuous
+          ? swipedLeft
+          : previousIndex < currentIndex
+          ? swipedLeft
+          : swipedRight
+      setSwipeDirection({
+        direction: swipedDirection,
+        to: currentIndex,
+        from: previousIndex,
+      })
     }
-  }, [previousIndex, currentIndex])
+  }, [previousIndex, currentIndex, isRTL, lastIndex, continuous])
+  const handleOnSwipedDirection = React.useCallback(
+    direction => {
+      if (typeof onSwipeDirection === 'function') onSwipeDirection(direction)
+    },
+    [onSwipeDirection],
+  )
   React.useEffect(() => {
-    if (typeof onSwipeDirection === 'function') onSwipeDirection(swipeDirection)
-  }, [swipeDirection])
+    handleOnSwipedDirection(swipeDirection)
+  }, [swipeDirection, handleOnSwipedDirection])
 
   React.useEffect(() => {
     if (items.length) {
