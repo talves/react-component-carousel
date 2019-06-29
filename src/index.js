@@ -139,14 +139,10 @@ const ComponentCarousel = ({
 
   const pauseAutoPlay = () => {
     if (autoPlay) setAutoPlaying(false)
-    if (autoIntervalId) {
-      window.clearTimeout(autoIntervalId)
-      setAutoIntervalId(null)
-    }
+    if (autoIntervalId) setAutoIntervalId(null)
   }
 
   const autoPlayNext = () => {
-    if (autoIntervalId) window.clearTimeout(autoIntervalId)
     setAutoIntervalId(
       window.setTimeout(() => {
         slideNext()
@@ -207,7 +203,7 @@ const ComponentCarousel = ({
     setIsFullscreen(true)
   }
 
-  const handleScreenChange = () => {
+  const handleScreenEvent = React.useCallback(() => {
     /**
      * handles screen change events that the browser triggers e.g. esc key
      */
@@ -218,14 +214,20 @@ const ComponentCarousel = ({
       document.webkitFullscreenElement
 
     setIsFullscreen(!!fullScreenElement)
-  }
+  }, [])
 
   /**
    * Full Screen handlers
    */
+  const handleScreenChange = React.useCallback(
+    isFull => {
+      if (typeof onScreenChange === 'function') onScreenChange(isFull)
+    },
+    [onScreenChange],
+  )
   React.useEffect(() => {
-    if (typeof onScreenChange === 'function') onScreenChange(isFullscreen)
-  }, [isFullscreen])
+    handleScreenChange(isFullscreen)
+  }, [isFullscreen, handleScreenChange])
 
   const togglePlay = () => {
     setAutoPlaying(!autoPlaying)
@@ -287,8 +289,24 @@ const ComponentCarousel = ({
 
   React.useEffect(() => {
     screenChangeEvents.forEach(eventName => {
-      document.addEventListener(eventName, handleScreenChange)
+      document.addEventListener(eventName, handleScreenEvent)
     })
+    return function cleanup() {
+      screenChangeEvents.forEach(eventName => {
+        document.removeEventListener(eventName, handleScreenEvent)
+      })
+    }
+  }, [handleScreenEvent])
+
+  React.useEffect(() => {
+    const interval = autoIntervalId
+    // Cleans up last interval if not null
+    return function cleanup() {
+      if (interval) window.clearInterval(interval)
+    }
+  }, [autoIntervalId])
+
+  React.useEffect(() => {
     setIsSlidePlaying(false)
     setIsTransitioning(false)
 
@@ -296,18 +314,9 @@ const ComponentCarousel = ({
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown)
 
-      screenChangeEvents.forEach(eventName => {
-        document.removeEventListener(eventName, handleScreenChange)
-      })
-
-      if (autoIntervalId) {
-        window.clearInterval(autoIntervalId)
-        setAutoIntervalId(null)
-      }
-
       if (typeof onCleanup === 'function') onCleanup()
     }
-  }, [])
+  }, [handleKeyDown, onCleanup])
 
   /**
    * Current index changed, update views
