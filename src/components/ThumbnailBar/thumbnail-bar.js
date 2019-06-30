@@ -37,36 +37,6 @@ function ThumbnailBar({
   const wrapperSize = useComponentSize(wrapperRef) // A custom Hook
   const containerSize = useComponentSize(containerRef) // A custom Hook
 
-  const getThumbsTranslate = indexDifference => {
-    if (disableThumbnailScroll) return 0
-
-    let totalScroll
-
-    if (containerRef) {
-      // total scroll required to see the last thumbnail
-      if (isThumbnailVertical) {
-        if (thumbnailsScrollHeight <= thumbnailsWrapperHeight) {
-          return 0
-        }
-        totalScroll = thumbnailsScrollHeight - thumbnailsWrapperHeight
-      } else {
-        if (
-          thumbnailsScrollWidth <= thumbnailsWrapperWidth ||
-          thumbnailsWrapperWidth <= 0
-        ) {
-          return 0
-        }
-        totalScroll = thumbnailsScrollWidth - thumbnailsWrapperWidth
-      }
-
-      // scroll-x required per index change
-      const perIndexScroll = totalScroll / (thumbnailsCount - 1)
-
-      return indexDifference * perIndexScroll
-    }
-    return 0
-  }
-
   const handleThumbnailClick = index => {
     return event => {
       event.preventDefault()
@@ -92,7 +62,36 @@ function ThumbnailBar({
     }
   }
 
-  function handleTranslate() {
+  React.useEffect(() => {
+    const getThumbsTranslate = indexDifference => {
+      if (disableThumbnailScroll) return 0
+
+      let totalScroll
+
+      if (containerRef) {
+        // total scroll required to see the last thumbnail
+        if (isThumbnailVertical) {
+          if (thumbnailsScrollHeight <= thumbnailsWrapperHeight) {
+            return 0
+          }
+          totalScroll = thumbnailsScrollHeight - thumbnailsWrapperHeight
+        } else {
+          if (
+            thumbnailsScrollWidth <= thumbnailsWrapperWidth ||
+            thumbnailsWrapperWidth <= 0
+          ) {
+            return 0
+          }
+          totalScroll = thumbnailsScrollWidth - thumbnailsWrapperWidth
+        }
+
+        // scroll-x required per index change
+        const perIndexScroll = totalScroll / (thumbnailsCount - 1)
+
+        return indexDifference * perIndexScroll
+      }
+      return 0
+    }
     if (currentIndex === 0) {
       setThumbsTranslate(0)
     } else {
@@ -106,7 +105,19 @@ function ThumbnailBar({
         }
       }
     }
-  }
+  }, [
+    currentIndex,
+    disableThumbnailScroll,
+    isThumbnailVertical,
+    previousIndex,
+    thumbnailPosition,
+    thumbnailsCount,
+    thumbnailsScrollHeight,
+    thumbnailsScrollWidth,
+    thumbnailsWrapperHeight,
+    thumbnailsWrapperWidth,
+    thumbsTranslate,
+  ])
 
   React.useEffect(() => {
     setThumbnailsWrapperWidth(wrapperSize.width)
@@ -117,7 +128,6 @@ function ThumbnailBar({
     setIsThumbnailVertical(
       thumbnailPosition === 'left' || thumbnailPosition === 'right',
     )
-    handleTranslate()
   }, [thumbnailPosition])
 
   React.useEffect(() => {
@@ -144,7 +154,6 @@ function ThumbnailBar({
    * Current index changed, update thumbnails view
    */
   React.useEffect(() => {
-    handleTranslate()
     setPreviousIndex(currentIndex)
   }, [currentIndex])
 
