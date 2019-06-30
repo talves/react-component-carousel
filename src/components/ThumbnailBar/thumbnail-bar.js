@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useComponentSize } from '../../utils/hooks'
+import {useComponentSize} from '../../utils/hooks'
 import ThumbnailInner from './thumbnail-inner'
 
 // eslint-disable-next-line max-lines-per-function
@@ -17,7 +17,7 @@ function ThumbnailBar({
   slideOnThumbnailOver = false,
   onError,
   disabled = false,
- }) {
+}) {
   const wrapperRef = React.useRef(null)
   const containerRef = React.useRef(null)
   const [clickedIndex, setClickedIndex] = React.useState(currentIndex)
@@ -28,12 +28,14 @@ function ThumbnailBar({
   const [thumbnailsScrollHeight, setThumbnailsScrollHeight] = React.useState(0)
   const [thumbnailsScrollWidth, setThumbnailsScrollWidth] = React.useState(0)
   const [thumbnailsWrapperWidth, setThumbnailsWrapperWidth] = React.useState(0)
-  const [thumbnailsWrapperHeight, setThumbnailsWrapperHeight] = React.useState(0)
+  const [thumbnailsWrapperHeight, setThumbnailsWrapperHeight] = React.useState(
+    0,
+  )
   const [thumbnailBarStyle, setThumbnailBarStyle] = React.useState({})
   const [isThumbnailVertical, setIsThumbnailVertical] = React.useState(false)
 
-  const wrapperSize = useComponentSize(wrapperRef); // A custom Hook
-  const containerSize = useComponentSize(containerRef); // A custom Hook
+  const wrapperSize = useComponentSize(wrapperRef) // A custom Hook
+  const containerSize = useComponentSize(containerRef) // A custom Hook
 
   const getThumbsTranslate = indexDifference => {
     if (disableThumbnailScroll) return 0
@@ -65,7 +67,7 @@ function ThumbnailBar({
     return 0
   }
 
-  const handleThumbnailClick = index => { 
+  const handleThumbnailClick = index => {
     return event => {
       event.preventDefault()
       if (disabled) return
@@ -112,13 +114,19 @@ function ThumbnailBar({
   }, [wrapperSize])
 
   React.useEffect(() => {
-    setIsThumbnailVertical(thumbnailPosition === 'left' || thumbnailPosition === 'right')
+    setIsThumbnailVertical(
+      thumbnailPosition === 'left' || thumbnailPosition === 'right',
+    )
     handleTranslate()
   }, [thumbnailPosition])
 
   React.useEffect(() => {
-    setThumbnailsScrollHeight(containerSize.scrollHeight ? containerSize.scrollHeight : 0)
-    setThumbnailsScrollWidth(containerSize.scrollWidth ? containerSize.scrollWidth : 0)
+    setThumbnailsScrollHeight(
+      containerSize.scrollHeight ? containerSize.scrollHeight : 0,
+    )
+    setThumbnailsScrollWidth(
+      containerSize.scrollWidth ? containerSize.scrollWidth : 0,
+    )
   }, [containerSize])
 
   React.useEffect(() => {
@@ -167,14 +175,11 @@ function ThumbnailBar({
       OTransform: translate,
       transform: translate,
     })
-  }, [useTranslate3D, isRTL, thumbsTranslate])
+  }, [useTranslate3D, isRTL, thumbsTranslate, isThumbnailVertical])
 
   React.useEffect(() => {
-    setThumbnailBarStyle(isThumbnailVertical
-      ? { height: `${height}px` }
-      : { }
-    )
-  }, [height])
+    setThumbnailBarStyle(isThumbnailVertical ? {height: `${height}px`} : {})
+  }, [height, isThumbnailVertical])
 
   const isActive = index => index === currentIndex
 
@@ -192,32 +197,46 @@ function ThumbnailBar({
           style={thumbnailStyle}
           aria-label={`Thumbnail Navigation on ${thumbnailPosition}`}
         >
-          {items && items.map((item, index) => {
-            const itemRenderThumbInner =
-              item.renderThumbInner || renderThumbInner || ThumbnailInner
-            const thumbnailClass = item.thumbnailClass
-              ? ` ${item.thumbnailClass}`
-              : ''
-            return (
-              <div
-                key={index}
-                role="button"
-                tabIndex={index}
-                aria-pressed={isActive(index) ? 'true' : 'false'}
-                aria-label={`Go to Slide ${index + 1}`}
-                className={`component-carousel__thumbnail${isActive(index) ? ' active' : ''}${thumbnailClass}`}
-                onMouseLeave={slideOnThumbnailOver ? handleThumbnailMouseLeave(index) : undefined}
-                onMouseMove={slideOnThumbnailOver ? handleThumbnailMouseLeave(index) : undefined}
-                onMouseOver={slideOnThumbnailOver ? handleThumbnailMouseOver(index) : undefined}
-                onClick={handleThumbnailClick(index)}
-                onFocus={handleThumbnailClick(index)}
-                onKeyDown={() => {}}
-              >
-                {itemRenderThumbInner({item, onError})}
-              </div>
-            )
-          })
-        }
+          {items &&
+            items.map((item, index) => {
+              const itemRenderThumbInner =
+                item.renderThumbInner || renderThumbInner || ThumbnailInner
+              const thumbnailClass = item.thumbnailClass
+                ? ` ${item.thumbnailClass}`
+                : ''
+              return (
+                <div
+                  key={index}
+                  role="button"
+                  tabIndex={index}
+                  aria-pressed={isActive(index) ? 'true' : 'false'}
+                  aria-label={`Go to Slide ${index + 1}`}
+                  className={`component-carousel__thumbnail${
+                    isActive(index) ? ' active' : ''
+                  }${thumbnailClass}`}
+                  onMouseLeave={
+                    slideOnThumbnailOver
+                      ? handleThumbnailMouseLeave(index)
+                      : undefined
+                  }
+                  onMouseMove={
+                    slideOnThumbnailOver
+                      ? handleThumbnailMouseLeave(index)
+                      : undefined
+                  }
+                  onMouseOver={
+                    slideOnThumbnailOver
+                      ? handleThumbnailMouseOver(index)
+                      : undefined
+                  }
+                  onClick={handleThumbnailClick(index)}
+                  onFocus={handleThumbnailClick(index)}
+                  onKeyDown={() => {}}
+                >
+                  {itemRenderThumbInner({item, onError})}
+                </div>
+              )
+            })}
         </div>
       </div>
     </div>
@@ -235,8 +254,8 @@ ThumbnailBar.propTypes = {
   renderThumbInner: PropTypes.func,
   onThumbClicked: PropTypes.func,
   slideOnThumbnailOver: PropTypes.bool,
-  onError:  PropTypes.func,
-  disabled:  PropTypes.bool,
+  onError: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 export default ThumbnailBar
