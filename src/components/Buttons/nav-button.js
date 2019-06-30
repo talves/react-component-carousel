@@ -1,7 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function NavButton({ renderer, onClick, className, disabled, direction, ...props }) {
+function NavButton({
+  renderer,
+  onClick,
+  className,
+  disabled,
+  direction,
+  ...props
+}) {
   if (renderer) return renderer({onClick, className, disabled, ...props})
   return (
     <button

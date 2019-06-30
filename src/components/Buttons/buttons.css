@@ -16,7 +16,7 @@
 .component-carousel__left-nav::before,
 .component-carousel__right-nav::before {
   display: inline-block;
-  font-family: "Ionicons";
+  font-family: 'Ionicons';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -33,9 +33,9 @@
 .component-carousel__left-nav::before,
 .component-carousel__right-nav::before {
   color: #fff;
-  line-height: .7;
+  line-height: 0.7;
   text-shadow: 0 2px 2px #1a1a1a;
-  transition: color .2s ease-out;
+  transition: color 0.2s ease-out;
 }
 
 .component-carousel__fullscreen-button:hover::before,
@@ -46,7 +46,6 @@
 }
 
 @media (max-width: 768px) {
-
   .component-carousel__fullscreen-button:hover::before,
   .component-carousel__play-button:hover::before,
   .component-carousel__left-nav:hover::before,
@@ -68,7 +67,6 @@
 }
 
 @media (max-width: 768px) {
-
   .component-carousel__fullscreen-button::before,
   .component-carousel__play-button::before {
     font-size: 2.4em;
@@ -76,7 +74,6 @@
 }
 
 @media (max-width: 480px) {
-
   .component-carousel__fullscreen-button::before,
   .component-carousel__play-button::before {
     font-size: 2em;
@@ -90,7 +87,6 @@
 }
 
 @media (max-width: 768px) {
-
   .component-carousel__fullscreen-button:hover::before,
   .component-carousel__play-button:hover::before {
     transform: none;
@@ -102,11 +98,11 @@
 }
 
 .component-carousel__fullscreen-button::before {
-  content: "";
+  content: '';
 }
 
 .component-carousel__fullscreen-button.active::before {
-  content: "";
+  content: '';
 }
 
 .component-carousel__fullscreen-button.active:hover::before {
@@ -118,11 +114,11 @@
 }
 
 .component-carousel__play-button::before {
-  content: "";
+  content: '';
 }
 
 .component-carousel__play-button.active::before {
-  content: "";
+  content: '';
 }
 
 .component-carousel__left-nav,
@@ -137,12 +133,11 @@
 .component-carousel__left-nav[disabled],
 .component-carousel__right-nav[disabled] {
   cursor: disabled;
-  opacity: .6;
+  opacity: 0.6;
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
-
   .component-carousel__left-nav,
   .component-carousel__right-nav {
     font-size: 3.4em;
@@ -151,7 +146,6 @@
 }
 
 @media (max-width: 480px) {
-
   .component-carousel__left-nav,
   .component-carousel__right-nav {
     font-size: 2.4em;
@@ -164,7 +158,7 @@
 }
 
 .component-carousel__left-nav::before {
-  content: "";
+  content: '';
 }
 
 .component-carousel__right-nav {
@@ -172,5 +166,5 @@
 }
 
 .component-carousel__right-nav::before {
-  content: "";
+  content: '';
 }

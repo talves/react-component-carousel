@@ -18,15 +18,15 @@ const Wrapper = ({children}) => {
 Wrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]).isRequired,
 }
 
-function BulletBar({ items, onClick, selectedIndex, disabled }) {
+function BulletBar({items, onClick, selectedIndex, disabled}) {
   const [currentIndex, setCurrentIndex] = React.useState(0)
 
   function handleIndexChange(index) {
-    return (event) => {
+    return event => {
       event.preventDefault()
       if (disabled) return
       if (typeof onClick === 'function') onClick(index)
@@ -37,25 +37,27 @@ function BulletBar({ items, onClick, selectedIndex, disabled }) {
     setCurrentIndex(selectedIndex)
   }, [selectedIndex])
 
-  return <Wrapper>
-    {items.map((item, index) => {
-      const isActive = (currentIndex === index)
-      return (
-        <button
-          key={index}
-          type="button"
-          className={[
-            'component-carousel__bullet',
-            isActive ? 'active' : '',
-            item.bulletClass || '',
-          ].join(' ')}
-          onClick={handleIndexChange(index)}
-          aria-pressed={isActive ? 'true' : 'false'}
-          aria-label={`Go to Slide ${index + 1}`}
-        />
-      )
-    })}
-  </Wrapper>
+  return (
+    <Wrapper>
+      {items.map((item, index) => {
+        const isActive = currentIndex === index
+        return (
+          <button
+            key={index}
+            type="button"
+            className={[
+              'component-carousel__bullet',
+              isActive ? 'active' : '',
+              item.bulletClass || '',
+            ].join(' ')}
+            onClick={handleIndexChange(index)}
+            aria-pressed={isActive ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+          />
+        )
+      })}
+    </Wrapper>
+  )
 }
 
 BulletBar.propTypes = {
@@ -64,6 +66,5 @@ BulletBar.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
 }
-
 
 export default BulletBar

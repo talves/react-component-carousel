@@ -13,6 +13,7 @@
   "scripts": {
     "start": "ada-scripts build --bundle --watch",
     "build": "ada-scripts build --bundle --environment BUILD_NAME:ComponentCarousel",
+    "format": "ada-scripts format \"./src/**\"",
     "lint": "ada-scripts lint",
     "test": "ada-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",

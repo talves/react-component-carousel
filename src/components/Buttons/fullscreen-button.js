@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function FullscreenButton({ renderer, onClick, className, active, ...props }) {
+function FullscreenButton({renderer, onClick, className, active, ...props}) {
   if (renderer) return renderer({onClick, className, active, ...props})
 
   return (

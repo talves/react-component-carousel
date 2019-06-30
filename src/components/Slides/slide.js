@@ -15,10 +15,13 @@ function Slide({
   onMouseLeave,
   onFocus,
 }) {
-  const handleKeyDown = React.useCallback(event => {
-    const key = parseInt(event.which || event.keyCode || 0, 10)
-    if (typeof onSlideClick === 'function' && key === 32) onSlideClick(event)
-  }, [onSlideClick])
+  const handleKeyDown = React.useCallback(
+    event => {
+      const key = parseInt(event.which || event.keyCode || 0, 10)
+      if (typeof onSlideClick === 'function' && key === 32) onSlideClick(event)
+    },
+    [onSlideClick],
+  )
 
   return (
     <div
@@ -44,7 +47,7 @@ function Slide({
 Slide.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]).isRequired,
   index: PropTypes.number,
   className: PropTypes.string,

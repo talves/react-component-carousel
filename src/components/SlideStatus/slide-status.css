@@ -11,7 +11,7 @@
 
 @media (max-width: 768px) {
   .component-carousel__slide-status {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 5px 10px;
   }
 }

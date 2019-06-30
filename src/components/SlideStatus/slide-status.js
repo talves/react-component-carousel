@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function SlideStatus({ current, separator, total }) {
-
+function SlideStatus({current, separator, total}) {
   return (
     <div className="component-carousel__slide-status">
       <span className="component-carousel__slide-status-current">
