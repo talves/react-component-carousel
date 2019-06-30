@@ -105,6 +105,7 @@ function ThumbnailBar({
         }
       }
     }
+    setClickedIndex(currentIndex)
   }, [
     currentIndex,
     disableThumbnailScroll,
