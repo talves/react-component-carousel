@@ -126,18 +126,22 @@ const ComponentCarousel = ({
   const canSlideLeft = () =>
     continuous || (isRTL ? canSlideNext() : canSlidePrevious())
   //Slide duration changed, update throttle duration
-  const slideToIndex = index => {
-    if (!isTransitioning) {
-      const slideCount = items.length - 1
-      const nextIndex = index < 0 ? slideCount : index > slideCount ? 0 : index
+  const slideToIndex = React.useCallback(
+    index => {
+      if (!isTransitioning) {
+        const slideCount = items.length - 1
+        const nextIndex =
+          index < 0 ? slideCount : index > slideCount ? 0 : index
 
-      setOffsetPercentage(0)
-      setTransitionStyle({
-        transition: `all ${slideDuration}ms ease-out`,
-      })
-      setCurrentIndex(nextIndex)
-    }
-  }
+        setOffsetPercentage(0)
+        setTransitionStyle({
+          transition: `all ${slideDuration}ms ease-out`,
+        })
+        setCurrentIndex(nextIndex)
+      }
+    },
+    [isTransitioning, items.length, slideDuration],
+  )
 
   const pauseAutoPlay = () => {
     if (autoPlay) setAutoPlaying(false)
@@ -338,15 +342,18 @@ const ComponentCarousel = ({
     // External prop changed to auto play
     setAutoPlaying(autoPlay)
     if (autoPlay) autoPlayNext()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay])
   React.useEffect(() => {
     if (typeof onSlide === 'function')
       onSlide({index: currentIndex, isPlaying: isSlidePlaying})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSlidePlaying])
   React.useEffect(() => {
     if (autoPlaying) slideToIndex(currentIndex + 1) // Continue
     // Paused, because autoPlaying toggled off
     if (!autoPlaying && typeof onPause === 'function') onPause(currentIndex)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlaying])
   React.useEffect(() => {
     if (!isTransitioning) {
@@ -354,6 +361,7 @@ const ComponentCarousel = ({
       setKeyClicked(NO_KEY)
       if (autoPlaying) autoPlayNext()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTransitioning])
 
   /**
