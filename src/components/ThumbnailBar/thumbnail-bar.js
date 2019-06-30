@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {useComponentSize} from '../../utils/hooks'
+import {usePrevious, useComponentSize} from '../../utils/hooks'
 import ThumbnailInner from './thumbnail-inner'
 
 // eslint-disable-next-line max-lines-per-function
@@ -21,7 +21,7 @@ function ThumbnailBar({
   const wrapperRef = React.useRef(null)
   const containerRef = React.useRef(null)
   const [clickedIndex, setClickedIndex] = React.useState(currentIndex)
-  const [previousIndex, setPreviousIndex] = React.useState(currentIndex)
+  const previousIndex = usePrevious(currentIndex)
   const [thumbnailsCount, setThumbnailsCount] = React.useState(0)
   const [thumbnailStyle, setThumbnailStyle] = React.useState([])
   const [thumbsTranslate, setThumbsTranslate] = React.useState(0)
@@ -148,14 +148,8 @@ function ThumbnailBar({
    */
   React.useEffect(() => {
     if (typeof onThumbClicked === 'function') onThumbClicked(clickedIndex)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedIndex])
-
-  /**
-   * Current index changed, update thumbnails view
-   */
-  React.useEffect(() => {
-    setPreviousIndex(currentIndex)
-  }, [currentIndex])
 
   /**
    * Replaces getThumbnailStyle, updates on settings changed
