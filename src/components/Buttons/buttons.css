@@ -124,7 +124,7 @@
 .component-carousel__left-nav,
 .component-carousel__right-nav {
   color: #fff;
-  font-size: 5em;
+  font-size: 2em;
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
