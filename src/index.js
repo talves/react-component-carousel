@@ -77,7 +77,6 @@ const ComponentCarousel = ({
   onFocus,
   onMouseLeave,
   onThumbnailClick,
-  onCleanup,
   renderCustomControls,
   additionalClass,
 }) => {
@@ -139,7 +138,6 @@ const ComponentCarousel = ({
       setCurrentIndex(nextIndex)
     }
   }
-  const slideNext = event => slideToIndex(currentIndex + 1, event)
 
   const pauseAutoPlay = () => {
     if (autoPlay) setAutoPlaying(false)
@@ -149,7 +147,7 @@ const ComponentCarousel = ({
   const autoPlayNext = () => {
     setAutoIntervalId(
       window.setTimeout(() => {
-        slideNext()
+        slideToIndex(currentIndex + 1)
       }, slideInterval),
     )
   }
@@ -314,16 +312,6 @@ const ComponentCarousel = ({
     }
   }, [autoIntervalId])
 
-  React.useEffect(() => {
-    setIsSlidePlaying(false)
-    setIsTransitioning(false)
-
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      if (typeof onCleanup === 'function') onCleanup()
-    }
-  }, [onCleanup])
-
   /**
    * Current index changed, update views
    */
@@ -356,7 +344,7 @@ const ComponentCarousel = ({
       onSlide({index: currentIndex, isPlaying: isSlidePlaying})
   }, [isSlidePlaying])
   React.useEffect(() => {
-    if (autoPlaying) slideNext() // Continue
+    if (autoPlaying) slideToIndex(currentIndex + 1) // Continue
     // Paused, because autoPlaying toggled off
     if (!autoPlaying && typeof onPause === 'function') onPause(currentIndex)
   }, [autoPlaying])
@@ -552,7 +540,6 @@ ComponentCarousel.propTypes = {
   onPause: PropTypes.func,
   onPlay: PropTypes.func,
   onClick: PropTypes.func,
-  onCleanup: PropTypes.func,
   onImageLoad: PropTypes.func,
   onImageError: PropTypes.func,
   onTouchMove: PropTypes.func,
