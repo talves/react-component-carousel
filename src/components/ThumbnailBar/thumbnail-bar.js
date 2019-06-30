@@ -21,6 +21,7 @@ function ThumbnailBar({
   const wrapperRef = React.useRef(null)
   const containerRef = React.useRef(null)
   const [clickedIndex, setClickedIndex] = React.useState(currentIndex)
+  const [activeIndex, setActiveIndex] = React.useState(currentIndex)
   const previousIndex = usePrevious(currentIndex)
   const [thumbnailsCount, setThumbnailsCount] = React.useState(0)
   const [thumbnailStyle, setThumbnailStyle] = React.useState([])
@@ -40,25 +41,30 @@ function ThumbnailBar({
   const handleThumbnailClick = index => {
     return event => {
       event.preventDefault()
-      if (disabled) return
-      setClickedIndex(index)
+      if (!disabled && index !== activeIndex) {
+        setActiveIndex(index)
+        setClickedIndex(index)
+      }
     }
   }
 
   const handleThumbnailMouseLeave = index => {
     return event => {
       event.preventDefault()
-      if (!slideOnThumbnailOver || disabled) return
-      setClickedIndex(index)
+      if (slideOnThumbnailOver && !disabled && index !== activeIndex) {
+        setActiveIndex(index)
+        setClickedIndex(index)
+      }
     }
   }
 
   const handleThumbnailMouseOver = index => {
     return event => {
       event.preventDefault()
-      if (!slideOnThumbnailOver || disabled) return
-      if (index === currentIndex) return
-      setClickedIndex(index)
+      if (slideOnThumbnailOver && !disabled && index !== activeIndex) {
+        setActiveIndex(index)
+        setClickedIndex(index)
+      }
     }
   }
 
@@ -105,6 +111,7 @@ function ThumbnailBar({
         }
       }
     }
+    setActiveIndex(currentIndex)
     setClickedIndex(currentIndex)
   }, [
     currentIndex,
