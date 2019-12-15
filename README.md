@@ -1,3 +1,5 @@
+## Don't use this! It's crap. There are better ways to do this for UX. It was only a proof of concept written when Hooks came out.
+
 <div align="center">
 <h1>react-component-carousel</h1>
 
