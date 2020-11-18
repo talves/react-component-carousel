@@ -31,7 +31,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.4",
     "react-swipeable": "^5.2.3",
-    "semantic-release": "15.13.21"
+    "semantic-release": "17.2.3"
   },
   "devDependencies": {
     "@testing-library/react": "^8.0.4",
